@@ -1,0 +1,29 @@
+# --- Configuración con credenciales (en el repo solo van los *.example.php) ---
+config/config.php
+config/epicor_config.php
+.env
+.env.*
+*.pem
+*.key
+*.pfx
+
+# --- Logs y archivos temporales ---
+cron/logs/*
+!cron/logs/.gitkeep
+*.log
+cj_*
+cookies*.txt
+
+# --- Exportaciones / respaldos locales ---
+*.csv
+*.xlsx
+*.zip
+*.bak
+*.sql.gz
+
+# --- Sistema operativo / editores ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

@@ -1,0 +1,32 @@
+#!/bin/sh
+# Bloquea commits que incluyan archivos de configuración reales o credenciales.
+# Activar:  git config core.hooksPath .githooks
+# Saltar (solo si estás SEGURO de que es un falso positivo):  git commit --no-verify
+
+fallo=0
+archivos=$(git diff --cached --name-only --diff-filter=ACMR)
+
+# 1) Archivos que nunca deben subirse
+for f in $archivos; do
+  case "$f" in
+    config/config.php|config/epicor_config.php|*.env|.env*|*.pem|*.key|*.pfx|cj_*|cookies*.txt)
+      echo "BLOQUEADO: $f no debe subirse al repositorio."
+      fallo=1 ;;
+  esac
+done
+
+# 2) Credenciales escritas en el código (líneas agregadas en este commit)
+patron="(['\"](password|pass|pwd|api_key|apikey|secret|token)['\"][[:space:]]*=>[[:space:]]*['\"][^'\"]+['\"])|(\\\$(password|pass|pwd|api_key|apikey|secret|token)[[:space:]]*=[[:space:]]*['\"][^'\"]+['\"])|(x-api-key:[[:space:]]*[A-Za-z0-9]{16,})|(-----BEGIN [A-Z ]*PRIVATE KEY-----)"
+hallazgos=$(git diff --cached -U0 --diff-filter=ACMR -- $archivos | grep -E '^\+[^+]' | grep -iE "$patron")
+if [ -n "$hallazgos" ]; then
+  echo "BLOQUEADO: parece que hay contraseñas o claves en el código:"
+  echo "$hallazgos" | sed 's/^/   /' | cut -c1-160
+  fallo=1
+fi
+
+if [ $fallo -ne 0 ]; then
+  echo ""
+  echo "Quita esos datos (usa config/*.example.php con valores vacíos) y vuelve a intentar."
+  exit 1
+fi
+exit 0
