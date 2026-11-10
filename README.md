@@ -4,7 +4,7 @@ Sistema de control de inventario de fin de año con conexión a ERP (Epicor Kine
 
 **Stack:** PHP 8 · MySQL/MariaDB · Bootstrap 5 · JavaScript · Epicor Kinetic REST API
 
-> 🚧 En desarrollo.
+En desarrollo.
 
 ## Objetivo
 
