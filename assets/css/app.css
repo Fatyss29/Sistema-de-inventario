@@ -1,0 +1,135 @@
+/* assets/css/app.css — estilos del sistema de inventario */
+:root {
+  /* Paleta de marca (índigo / morado) */
+  --primario: #4338ca;
+  --primario-osc: #312e81;
+  --primario-claro: #eef0fd;
+  --acento: #7c3aed;
+  /* Colores de estado */
+  --ok: #15803d;
+  --rojo: #c62828;
+  --rojo-claro: #fdecec;
+  --ambar: #b26a00;
+  --ambar-claro: #fff4e0;
+  --fondo: #f5f6fb;
+  --borde: #dde0ee;
+  --borde-fuerte: #c9cde3;
+  --texto-suave: #575d78;
+}
+
+body { background: var(--fondo); font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+.barra { background: linear-gradient(90deg, var(--primario-osc), var(--primario) 60%, var(--acento)); }
+.barra .nav-link { white-space: nowrap; color: rgba(255,255,255,.82); }
+.barra .nav-link:hover, .barra .nav-link.active { color: #fff; }
+.barra .navbar-text { color: rgba(255,255,255,.85); white-space: nowrap; }
+.barra .nav-link.active { font-weight: 600; text-decoration: underline; text-underline-offset: 6px; }
+.btn-primario { background: var(--primario); border-color: var(--primario); color: #fff; }
+.btn-primario:hover, .btn-primario:focus { background: var(--primario-osc); border-color: var(--primario-osc); color: #fff; }
+.login-zona { min-height: 80vh; }
+.card { border-color: var(--borde); }
+.table { background: #fff; }
+.text-num { font-variant-numeric: tabular-nums; }
+.table td, .table th { font-variant-numeric: tabular-nums; }
+
+/* ---------- Pantallas de conteo ---------- */
+.entrada-escaner { font-size: clamp(1.4rem, 3.4vw, 2.6rem); padding: .6rem 1rem; border: 3px solid var(--primario); font-family: ui-monospace, Consolas, monospace; }
+.entrada-escaner:focus { box-shadow: 0 0 0 .25rem rgba(67, 56, 202, .25); border-color: var(--primario); }
+
+.panel-marbete { background: #fff; border: 2px solid var(--primario); border-radius: 12px; padding: 14px 18px; }
+.panel-marbete.vacio { border-style: dashed; border-color: #a5a9c8; }
+.panel-marbete .pm-sin { color: #555; font-size: 1.05rem; }
+.panel-marbete .pm-con, .panel-marbete.vacio .pm-sin { display: block; }
+.panel-marbete.vacio .pm-con, .panel-marbete:not(.vacio) .pm-sin { display: none; }
+.pm-folio { font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: .5px; }
+.pm-folio .badge { font-size: .45em; vertical-align: middle; }
+.pm-datos { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 8px; }
+.pm-datos > div { background: var(--primario-claro); border-radius: 8px; padding: 8px 12px; min-width: 0; }
+.pm-datos small { display: block; color: var(--texto-suave); font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; }
+.pm-datos b { display: block; font-size: clamp(1.2rem, 2.8vw, 2rem); overflow-wrap: anywhere; }
+
+/* Semáforo de lectura (verde = ok, rojo = error) */
+.semaforo { background: #222; border-radius: 24px; padding: 14px; display: flex; flex-direction: column; gap: 14px; width: 120px; }
+.semaforo .luz { width: 92px; height: 92px; border-radius: 50%; opacity: .18; transition: opacity .1s; }
+.semaforo .l-roja { background: #ff2a2a; }
+.semaforo .l-verde { background: #22dd44; }
+.semaforo.rojo .l-roja, .semaforo.verde .l-verde { opacity: 1; box-shadow: 0 0 30px currentColor; }
+.semaforo.rojo .l-roja { color: #ff2a2a; }
+.semaforo.verde .l-verde { color: #22dd44; }
+.semaforo-mini { flex-direction: row; width: auto; padding: 8px; border-radius: 30px; gap: 8px; }
+.semaforo-mini .luz { width: 34px; height: 34px; }
+@media (max-width: 991px) {
+  .semaforo:not(.semaforo-mini) { flex-direction: row; width: auto; padding: 8px; }
+  .semaforo:not(.semaforo-mini) .luz { width: 44px; height: 44px; }
+}
+
+/* Avisos */
+.toast-zona { position: fixed; top: 70px; right: 16px; left: 16px; z-index: 2000; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; pointer-events: none; }
+.aviso { pointer-events: auto; max-width: 520px; padding: 12px 16px; border-radius: 10px; color: #fff; font-weight: 600; box-shadow: 0 6px 20px rgba(0,0,0,.2); font-size: 1.05rem; transition: opacity .35s, transform .35s; }
+.aviso-ok { background: var(--ok); }
+.aviso-info { background: var(--primario); }
+.aviso-warn { background: #b26a00; }
+.aviso-error { background: var(--rojo); font-size: 1.2rem; }
+.aviso.sale { opacity: 0; transform: translateY(-8px); }
+
+/* Autocompletar */
+.ac-lista { position: absolute; z-index: 1050; left: 0; right: 0; top: 100%; max-height: 320px; overflow-y: auto; background: #fff; border: 1px solid var(--borde-fuerte); border-radius: 0 0 8px 8px; box-shadow: 0 8px 24px rgba(0,0,0,.12); }
+.ac-item { padding: 8px 12px; cursor: pointer; border-bottom: 1px solid #f0f0f0; }
+.ac-item.activo, .ac-item:hover { background: var(--primario-claro); }
+.ac-vacio { padding: 8px 12px; color: #888; }
+
+/* ---------- Supervisor / admin ---------- */
+.kpi { background: #fff; border: 1px solid var(--borde); border-radius: 10px; padding: 12px 14px; height: 100%; }
+.kpi small { color: var(--texto-suave); display: block; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; }
+.kpi b { font-size: 1.8rem; display: block; line-height: 1.2; }
+.kpi.k-rojo b { color: var(--rojo); }
+.kpi.k-ambar b { color: var(--ambar); }
+.kpi.k-verde b { color: var(--ok); }
+a.kpi { text-decoration: none; color: inherit; display: block; }
+a.kpi:hover { border-color: var(--primario); }
+
+tr.falta > td { background: var(--rojo-claro) !important; }
+tr.falta .dif, .dif.falta { color: var(--rojo); font-weight: 700; }
+tr.sobra > td { background: var(--ambar-claro) !important; }
+tr.sobra .dif, .dif.sobra { color: var(--ambar); font-weight: 700; }
+tr.lote-row > td { font-size: .88rem; border-top: 0; }
+tr.lote-row > td:first-child { padding-left: 2rem; }
+.parte-toggle { cursor: pointer; }
+.parte-toggle .flecha { display: inline-block; transition: transform .15s; width: 1em; }
+.parte-toggle.abierta .flecha { transform: rotate(90deg); }
+
+.conteo-col { border: 2px solid var(--borde); border-radius: 10px; background: #fff; }
+.conteo-col.vigente { border-color: var(--primario); }
+.conteo-col h3 { font-size: 1rem; }
+.celda-dif { background: var(--rojo-claro) !important; color: var(--rojo); font-weight: 700; }
+.timeline { list-style: none; padding-left: 0; margin: 0; }
+.timeline li { border-left: 3px solid var(--borde-fuerte); padding: 2px 0 8px 12px; position: relative; }
+.timeline li::before { content: ""; position: absolute; left: -7px; top: 6px; width: 11px; height: 11px; border-radius: 50%; background: var(--acento); }
+
+.selector-inv select { max-width: 320px; }
+@media print {
+  .barra, .no-print, .selector-inv, form.filtros { display: none !important; }
+  body { background: #fff; }
+}
+
+/* Barra fija de acciones (asignar 2do conteo) */
+.barra-acciones { position: sticky; bottom: 0; z-index: 10; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  background: #fff; border: 1px solid var(--borde-fuerte); border-radius: 10px; padding: 10px 12px; box-shadow: 0 -4px 16px rgba(0,0,0,.08); margin-bottom: 12px; }
+tr.asig-ok > td { background: #e8f5e9 !important; }
+tr.asig-pend > td { background: var(--rojo-claro) !important; }
+.est-ok { color: var(--ok); font-weight: 700; }
+.est-pend { color: var(--rojo); font-weight: 700; }
+
+/* Selector de contador (pantallas de conteo del supervisor) */
+.panel-contador { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: #fff; border: 2px solid var(--primario);
+  border-radius: 12px; padding: 10px 14px; }
+.panel-contador select { max-width: 460px; font-weight: 600; }
+.bloqueado { opacity: .35; pointer-events: none; filter: grayscale(1); }
+
+/* Elementos de Bootstrap con el color de la marca */
+a { color: var(--primario); }
+a:hover { color: var(--primario-osc); }
+.form-control:focus, .form-select:focus { border-color: var(--primario); box-shadow: 0 0 0 .25rem rgba(67, 56, 202, .2); }
+.form-check-input:checked { background-color: var(--primario); border-color: var(--primario); }
+.btn-primary { --bs-btn-bg: var(--primario); --bs-btn-border-color: var(--primario); --bs-btn-hover-bg: var(--primario-osc); --bs-btn-hover-border-color: var(--primario-osc); --bs-btn-active-bg: var(--primario-osc); }
+.btn-outline-primary { --bs-btn-color: var(--primario); --bs-btn-border-color: var(--primario); --bs-btn-hover-bg: var(--primario); --bs-btn-hover-border-color: var(--primario); --bs-btn-active-bg: var(--primario-osc); }
+.dropdown-item.active, .dropdown-item:active { background-color: var(--primario); }
